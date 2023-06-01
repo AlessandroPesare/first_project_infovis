@@ -1,4 +1,4 @@
-# first_project_infovis
+# First_project_infovis
 Piccolo progetto per prendere confidenza con la libreria d3.js per il corso di Visualizzazione delle Informazioni, Università Roma Tre, a.a. 2022-2023.
 # Specifica del progetto
 Crea un file json con dei dati bivariati: ci sono 10 data-case e ogni data-case ha due variabili quantitative.
