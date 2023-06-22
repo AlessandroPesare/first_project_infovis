@@ -7,7 +7,7 @@ var xScale = d3.scaleBand()
   .padding(0.1);
 
 var yScale = d3.scaleLinear()
-  .range([height, 0]);
+  .range([height, 0]); // Invertiamo i valori di range
 
 var xAxis = d3.axisBottom(xScale);
 var yAxis = d3.axisLeft(yScale).ticks(15);
@@ -22,19 +22,22 @@ var svg = d3.select("body")
   .append("g")
   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-function setXScaleDomain(data) {
-  xScale.domain(data.map(function(d) { return d.year; }));
-}
+  function setXScaleDomain(data) {
+    xScale.domain(data.map(function(d) { return d.year; }));
+  }
 
 function setYScaleDomain(data) {
-  yScale.domain([0, d3.max(data, function(d) { return d.value; })]);
+  var maxValue = d3.max(data, function(d) {
+    return Math.max(d.year, d.value);
+  });
+  yScale.domain([0, maxValue]);
 }
 
 function drawAxes() {
   svg.append("g")
     .attr("class", "x axis")
     .attr("transform", "translate(0," + height + ")")
-    .call(xAxis);
+    .call(xAxis.tickValues(xScale.domain()));
 
   svg.append("g")
     .attr("class", "y axis")
@@ -49,16 +52,6 @@ function handleClick(event, d) {
   var tempValue = newData.value;
   newData.value = newData.year;
   newData.year = tempValue;
-
-  var maxValue = d3.max(svg.selectAll(".bar").data(), function(d) {
-    return Math.max(d.value, d.year);
-  });
-
-  if (newData.value > maxValue) {
-    yScale.domain([0, newData.value]);
-  } else {
-    yScale.domain([0, maxValue]);
-  }
 
   clickedBar
     .datum(newData)
